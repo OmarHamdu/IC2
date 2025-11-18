@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المرجع الشامل + بنك الأسئلة (IT110)</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap');
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #2980b9;
+            --accent: #e67e22;
+            --success: #27ae60;
+            --error: #c0392b;
+            --bg: #f4f7f6;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg);
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        header h1 { margin: 0; font-size: 2.5rem; }
+        header p { opacity: 0.9; font-size: 1.1rem; margin-top: 10px; }
+
+        /* Navigation */
+        .nav-container {
+            background: #fff;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .nav-btn.active, .nav-btn:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        /* Content Sections */
+        .section {
+            display: none;
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .section.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Tables for Basmaga */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1.1rem;
+        }
+
+        th, td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            text-align: right;
+        }
+
+        th {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        tr:hover { background-color: #f9f9f9; }
+
+        .keyword { color: var(--error); font-weight: bold; }
+        .answer { color: var(--success); font-weight: bold; }
+
+        /* Quiz Styles */
+        .question-card {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .q-text { font-size: 1.2rem; font-weight: bold; margin-bottom: 15px; color: var(--primary); }
+        
+        .options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        
+        @media (max-width: 768px) { .options { grid-template-columns: 1fr; } }
+
+        .opt-btn {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        .opt-btn:hover { border-color: var(--secondary); background: #f0f8ff; }
+
+        .opt-btn.correct { background: var(--success); color: white; border-color: var(--success); }
+        .opt-btn.wrong { background: var(--error); color: white; border-color: var(--error); }
+
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            background: #fff3cd;
+            border-radius: 5px;
+            display: none;
+            border-right: 4px solid #f1c40f;
+        }
+
+        .start-exam-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            font-size: 1.3rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .start-exam-btn:hover { background: #d35400; }
+
+        /* Article Typography */
+        h2 { border-bottom: 3px solid var(--accent); display: inline-block; padding-bottom: 5px; color: var(--primary); }
+        p { line-height: 1.8; font-size: 1.1rem; }
+        .highlight { background: #fff3cd; padding: 0 5px; border-radius: 3px; }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>موسوعة الـ IT الشاملة</h1>
+    <p>شرح + بصمجة + بنك أسئلة | كل اللي تحتاجه عشان تقفل المادة</p>
+</header>
+
+<div class="nav-container">
+    <button class="nav-btn active" onclick="showSection('summary')">📖 الكبسولة (الشرح)</button>
+    <button class="nav-btn" onclick="showSection('basmaga')">⚡ قاموس البصمجة</button>
+    <button class="nav-btn" onclick="showSection('tf-logic')">❌✔ خوارزمية الصح والغلط</button>
+    <button class="nav-btn" onclick="showSection('quiz')">📝 بنك الأسئلة (Exam)</button>
+</div>
+
+<div id="summary" class="section active">
+    <h2>1. أساسيات النظام (The System)</h2>
+    <p>الكمبيوتر جهاز بيحول <span class="highlight">Data (خام)</span> لـ <span class="highlight">Information (مفيدة)</span>. أهم جزء في النظام هو <strong>People (أنا وأنت)</strong>. السوفت وير هو التعليمات، والهاردوير هو الأجهزة.</p>
+
+    <h2>2. أنواع الكمبيوتر (Types)</h2>
+    <ul>
+        <li><strong>Supercomputers:</strong> الأقوى والأسرع (ناسا، الأرصاد).</li>
+        <li><strong>Mainframe:</strong> شركات عملاقة وتأمين (ملايين العمليات).</li>
+        <li><strong>Minicomputers (Midrange):</strong> سيرفرات الشركات المتوسطة.</li>
+        <li><strong>Microcomputers:</strong> الأقل قوة والأكثر انتشاراً (لابتوب، ديسكتوب).</li>
+    </ul>
+
+    <h2>3. الهاردوير (Inside the Box)</h2>
+    <p>المخ هو <strong>CPU</strong> (بيحسب ويتحكم). الذاكرة <strong>RAM</strong> بتنسى (مؤقتة)، والـ <strong>ROM</strong> مبتنساش (دائمة). كل ده متركب على <strong>System Board</strong>.</p>
+
+    <h2>4. الإنترنت (Internet vs Web)</h2>
+    <p>الإنترنت هو السلك والشبكة، الويب (WWW) هو الصفحات والمحتوى. عشان تدخل محتاج <strong>ISP</strong> (الشركة) و <strong>Browser</strong> (البرنامج).</p>
+</div>
+
+<div id="basmaga" class="section">
+    <h2>🔥 مفاتيح الحل (لو شفت الكلمة دي اختار دي)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>لو لقيت في السؤال (Keyword)</th>
+                <th>تختار الإجابة (Answer)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Raw facts / Unprocessed</td><td class="answer">Data</td></tr>
+            <tr><td>Processed / Meaningful</td><td class="answer">Information</td></tr>
+            <tr><td>Set of instructions / Code</td><td class="answer">Program (Software)</td></tr>
+            <tr><td>Most important part</td><td class="answer">People</td></tr>
+            <tr><td>Physical equipment</td><td class="answer">Hardware</td></tr>
+            <tr><td>Brain of computer</td><td class="answer">Microprocessor (CPU)</td></tr>
+            <tr><td>Volatile / Temporary / Lost power</td><td class="answer">RAM</td></tr>
+            <tr><td>Non-volatile / Start-up / BIOS</td><td class="answer">ROM</td></tr>
+            <tr><td>Arithmetic / Math / Logic</td><td class="answer">ALU</td></tr>
+            <tr><td>NASA / Forecasting / Fastest</td><td class="answer">Supercomputer</td></tr>
+            <tr><td>Insurance / Large organizations</td><td class="answer">Mainframe</td></tr>
+            <tr><td>Desktop / Laptop / Least powerful</td><td class="answer">Microcomputer</td></tr>
+            <tr><td>Rules for exchange</td><td class="answer">Protocols</td></tr>
+            <tr><td>Unsolicited email</td><td class="answer">Spam</td></tr>
+            <tr><td>Everyday objects (Fridge/Coffee)</td><td class="answer">IoT</td></tr>
+            <tr><td>Pathway for bits</td><td class="answer">Bus Line</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div id="tf-logic" class="section">
+    <h2>⚖️ خوارزمية True / False</h2>
+    <p>القواعد دي مستنبطة من بنك الأسئلة في الملفات:</p>
+    
+    <h3>✅ الإجابة تكون TRUE لو:</h3>
+    <ul>
+        <li>الجملة بتعرف <strong>Program</strong> إنه (Set of instructions).</li>
+        <li>الجملة بتقول <strong>RAM</strong> (Volatile) أو <strong>ROM</strong> (Non-volatile).</li>
+        <li>الجملة بتقول <strong>Network</strong> بتربط جهازين أو أكتر.</li>
+        <li>الجملة بتقول <strong>System Unit</strong> هي الكيسة اللي فيها المكونات.</li>
+        <li>الجملة بتقول <strong>Cloud Computing</strong> بتنقل الشغل للإنترنت.</li>
+    </ul>
+
+    <h3>❌ الإجابة تكون FALSE لو:</h3>
+    <ul>
+        <li>قال إن <strong>ICT</strong> هو اللي بيعمل Process (غلط، ده الـ IS).</li>
+        <li>قال إن <strong>Minicomputers</strong> هي الأكثر انتشاراً (غلط، الـ Micro).</li>
+        <li>قال إن <strong>Input devices</strong> بتترجم المعلومات للبشر (غلط، دي الـ Output).</li>
+        <li>قال إن <strong>Laptop</strong> كبير ومينفعش يتشال (Too big).</li>
+        <li>قال إن <strong>Control Unit</strong> هي اللوحة الأم (Main board).</li>
+    </ul>
+</div>
+
+<div id="quiz" class="section">
+    <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-weight:bold;">
+        <span>عدد الأسئلة المتاحة: +60 سؤال</span>
+        <span id="score" style="color:var(--secondary)">النتيجة: 0 / 0</span>
+    </div>
+    
+    <div id="quiz-container">
+        </div>
+
+    <button class="start-exam-btn" onclick="generateExam()">🔄 توليد امتحان عشوائي جديد (20 سؤال)</button>
+</div>
+
+<script>
+    // =================================================
+    // بنك الأسئلة الشامل (تم تجميعه من جميع الملفات والردود)
+    // =================================================
+    const questionBank = [
+        // Chapter 1: Introduction
+        { q: "Raw, unprocessed facts, figures, and numbers are called:", options: ["Information", "Data", "Software", "Knowledge"], ans: 1, note: "Data هي المادة الخام." },
+        { q: "Data that has been processed and has meaning is called:", options: ["Hardware", "Data", "Information", "Input"], ans: 2, note: "Information هي البيانات المعالجة." },
+        { q: "A set of instructions that tells the computer what to do:", options: ["Hardware", "People", "Procedures", "Program (Software)"], ans: 3, note: "البرنامج هو مجموعة تعليمات." },
+        { q: "The physical equipment that processes data:", options: ["Software", "Hardware", "Data", "Information"], ans: 1, note: "الهاردوير هو الأجهزة الملموسة." },
+        { q: "The most important part of any information system:", options: ["Hardware", "Software", "People (End Users)", "Connectivity"], ans: 2, note: "البشر هم الأهم." },
+        
+        // Types of Computers
+        { q: "The fastest, most powerful, and most expensive type of computers:", options: ["Mainframe", "Supercomputer", "Microcomputer", "Server"], ans: 1, note: "بيستخدم في ناسا والأرصاد." },
+        { q: "Computers used by large organizations (insurance) for millions of transactions:", options: ["Supercomputer", "Mainframe", "Minicomputer", "PC"], ans: 1, note: "للشركات الضخمة." },
+        { q: "Also known as 'Servers', used by medium-sized companies:", options: ["Mainframe", "Minicomputer (Midrange)", "Microcomputer", "Supercomputer"], ans: 1, note: "سيرفرات الشركات المتوسطة." },
+        { q: "The least powerful but most widely used and fastest-growing type:", options: ["Mainframe", "Supercomputer", "Microcomputer", "Minicomputer"], ans: 2, note: "الكمبيوتر الشخصي (PC)." },
+        { q: "Apple Watch and Fitbit are examples of:", options: ["Laptops", "Tablets", "Wearable computers", "Desktops"], ans: 2, note: "أجهزة قابلة للارتداء." },
+        { q: "Type of microcomputer: Small enough to fit on top of a desk but too big to carry:", options: ["Laptop", "Desktop", "Tablet", "Phone"], ans: 1, note: "الديسكتوب." },
+
+        // System Unit & Hardware
+        { q: "The container that houses most of the electronic components:", options: ["Monitor", "System Unit", "Keyboard", "Mouse"], ans: 1, note: "الكيسة (System Unit)." },
+        { q: "The 'Brain' of the computer is:", options: ["RAM", "Microprocessor (CPU)", "Hard Disk", "System Board"], ans: 1, note: "المعالج هو المخ." },
+        { q: "The main circuit board that connects all components:", options: ["CPU", "RAM", "System Board (Motherboard)", "Power Supply"], ans: 2, note: "اللوحة الأم." },
+        { q: "Part of CPU that performs arithmetic and logical operations:", options: ["Control Unit", "ALU", "Bus", "Register"], ans: 1, note: "وحدة الحساب والمنطق ALU." },
+        { q: "Part of CPU that tells the rest of the computer what to do:", options: ["ALU", "Control Unit", "Memory", "Monitor"], ans: 1, note: "وحدة التحكم." },
+        { q: "Volatile memory (contents lost when power is off):", options: ["ROM", "Flash", "Hard Disk", "RAM"], ans: 3, note: "الرام مؤقتة." },
+        { q: "Non-volatile memory containing start-up instructions (BIOS):", options: ["RAM", "ROM", "Cache", "Virtual Memory"], ans: 1, note: "الروم دائمة." },
+        { q: "Pathway for bits representing data and instructions:", options: ["Socket", "Slot", "Bus Line", "Port"], ans: 2, note: "خطوط النقل (Bus)." },
+        { q: "A socket for external devices to connect to the system unit:", options: ["Bus", "Port", "Slot", "Chip"], ans: 1, note: "المنفذ (Port)." },
+        { q: "Temporary high-speed holding area between memory and CPU:", options: ["Flash", "ROM", "Cache Memory", "DVD"], ans: 2, note: "الكاش ميموري بتسرع الجهاز." },
+
+        // Software
+        { q: "Software that works in the background to manage resources:", options: ["Application Software", "System Software", "Browsers", "Games"], ans: 1, note: "نظام التشغيل (System)." },
+        { q: "Programs used by end-users for specific tasks (Word, Games):", options: ["System Software", "Utilities", "Application Software", "Drivers"], ans: 2, note: "التطبيقات (Applications)." },
+        { q: "Programs used to create text-based documents (Memos, Letters):", options: ["Spreadsheets", "Word Processors", "DBMS", "Graphics"], ans: 1, note: "معالج النصوص." },
+        { q: "Programs used to analyze numeric data and budgets:", options: ["Word Processors", "Spreadsheets", "Presentation", "DBMS"], ans: 1, note: "الجداول الحسابية (Excel)." },
+        { q: "Ability of the OS to switch between different applications:", options: ["Booting", "Multitasking", "Formatting", "Debugging"], ans: 1, note: "تعدد المهام." },
+        { q: "Starting or restarting the computer is called:", options: ["Loading", "Booting", "Running", "Executing"], ans: 1, note: "الإقلاع (Booting)." },
+        
+        // Internet & Connectivity
+        { q: "The actual physical network made of wires and cables:", options: ["The Web", "The Internet", "Browser", "Cloud"], ans: 1, note: "الإنترنت هو الشبكة المادية." },
+        { q: "The multimedia interface to internet resources:", options: ["The Internet", "FTP", "World Wide Web (WWW)", "Protocol"], ans: 2, note: "الويب هو المحتوى." },
+        { q: "Rules for exchanging data between computers:", options: ["Domain", "URL", "Protocols", "HTML"], ans: 2, note: "البروتوكولات." },
+        { q: "Copying files from the Internet to your computer:", options: ["Uploading", "Downloading", "Streaming", "Browsing"], ans: 1, note: "التحميل (Download)." },
+        { q: "Unsolicited / Unwelcome e-mail:", options: ["Spam", "Virus", "Blog", "Wiki"], ans: 0, note: "Spam." },
+        { q: "Business-oriented social networking site:", options: ["Facebook", "Twitter", "LinkedIn", "Instagram"], ans: 2, note: "LinkedIn للشغل." },
+        { q: "Everyday objects (coffee makers) connected to the internet:", options: ["Cloud Computing", "IoT", "Web 2.0", "AI"], ans: 1, note: "إنترنت الأشياء." },
+        { q: "Shifting computing activities to servers on the Internet:", options: ["Cloud Computing", "Multitasking", "Networking", "Processing"], ans: 0, note: "الحوسبة السحابية." },
+        { q: "E-Commerce type: Amazon selling to a person:", options: ["C2C", "B2B", "B2C", "P2P"], ans: 2, note: "Business to Consumer." },
+        { q: "E-Commerce type: Person selling to Person (eBay):", options: ["B2C", "C2C", "B2B", "G2C"], ans: 1, note: "Consumer to Consumer." },
+
+        // Numbers & Units
+        { q: "Binary system consists of digits:", options: ["0-9", "0 and 1", "0-F", "1-10"], ans: 1, note: "لغة الآلة (0,1)." },
+        { q: "Hexadecimal system uses digits and letters up to:", options: ["F", "Z", "D", "G"], ans: 0, note: "من 0 لـ 9 ومن A لـ F." },
+        { q: "8 bits grouped together form a:", options: ["Bit", "Byte", "Word", "Nibble"], ans: 1, note: "البايت = 8 بت." },
+        { q: "Unit of frequency measuring CPU speed:", options: ["Byte", "Pixel", "Hertz (Hz)", "Bit"], ans: 2, note: "السرعة بالهيرتز." },
+
+        // True / False (As MCQ)
+        { q: "True/False: RAM is non-volatile (permanent) storage.", options: ["True", "False"], ans: 1, note: "غلط، الرام مؤقتة وتطير." },
+        { q: "True/False: The Control Unit is the main circuit board.", options: ["True", "False"], ans: 1, note: "غلط، اللوحة الأم هي System Board." },
+        { q: "True/False: System software interacts directly with the user.", options: ["True", "False"], ans: 1, note: "غلط، دي وظيفة Application software." },
+        { q: "True/False: SSDs have no moving parts.", options: ["True", "False"], ans: 0, note: "صح، أسرع وأقوى." },
+        { q: "True/False: A higher CPU clock speed means better performance.", options: ["True", "False"], ans: 0, note: "صح." },
+        { q: "True/False: Input devices translate processed info to humans.", options: ["True", "False"], ans: 1, note: "غلط، دي الـ Output." },
+        { q: "True/False: Internet and Web are the same thing.", options: ["True", "False"], ans: 1, note: "غلط، النت شبكة، الويب محتوى." }
+    ];
+
+    function showSection(id) {
+        document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+        
+        document.getElementById(id).classList.add('active');
+        // Highlight button
+        event.target.classList.add('active');
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function generateExam() {
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = '';
+        
+        // خلط الأسئلة واختيار 20
+        const examQuestions = shuffleArray([...questionBank]).slice(0, 20);
+        
+        examQuestions.forEach((qData, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            
+            let optionsHtml = '';
+            qData.options.forEach((opt, i) => {
+                optionsHtml += `<div class="opt-btn" onclick="checkAnswer(this, ${qData.ans}, ${i}, '${qData.note || ''}')">${opt}</div>`;
+            });
+
+            card.innerHTML = `
+                <div class="q-text">${index + 1}. ${qData.q}</div>
+                <div class="options">${optionsHtml}</div>
+                <div class="feedback"></div>
+            `;
+            container.appendChild(card);
+        });
+        
+        document.getElementById('score').innerText = `النتيجة: 0 / ${examQuestions.length}`;
+        window.currentExamLength = examQuestions.length;
+        window.currentScore = 0;
+    }
+
+    function checkAnswer(btn, correctIndex, selectedIndex, note) {
+        const parent = btn.parentElement;
+        const feedback = parent.nextElementSibling;
+        const allOpts = parent.children;
+
+        if (parent.classList.contains('answered')) return;
+        parent.classList.add('answered');
+
+        if (selectedIndex === correctIndex) {
+            btn.classList.add('correct');
+            feedback.style.background = '#d4edda';
+            feedback.style.borderRightColor = '#28a745';
+            feedback.innerHTML = `<strong>✅ إجابة صحيحة!</strong> ${note}`;
+            window.currentScore++;
+        } else {
+            btn.classList.add('wrong');
+            allOpts[correctIndex].classList.add('correct');
+            feedback.style.background = '#f8d7da';
+            feedback.style.borderRightColor = '#dc3545';
+            feedback.innerHTML = `<strong>❌ خطأ!</strong> الإجابة الصح هي: ${allOpts[correctIndex].innerText}. <br> 💡 ${note}`;
+        }
+        
+        feedback.style.display = 'block';
+        document.getElementById('score').innerText = `النتيجة: ${window.currentScore} / ${window.currentExamLength}`;
+    }
+
+    // Start first exam
+    generateExam();
+
+</script>
+
+</body>
+</html>
